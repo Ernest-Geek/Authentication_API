@@ -72,3 +72,48 @@ def logout() -> str:
 
     return jsonify({"message": "Logout successful"}), 200
 
+# Update Profile Endpoint
+@app.route("/profile", methods=["PUT"])
+def update_profile():
+    if "email" not in session:
+        return jsonify({"error": "Not logged in"}), 401
+    
+    email = session["email"]
+    new_profile_data = request.json  # Assuming JSON payload
+    try:
+        AUTH.update_profile(email, new_profile_data)  # Update this line with your update profile logic
+        return jsonify({"message": "Profile updated successfully"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# Change Password Endpoint
+@app.route("/change-password", methods=["POST"])
+def change_password():
+    if "email" not in session:
+        return jsonify({"error": "Not logged in"}), 401
+    
+    email = session["email"]
+    old_password = request.json.get("old_password")
+    new_password = request.json.get("new_password")
+    try:
+        AUTH.change_password(email, old_password, new_password)  # Update this line with your change password logic
+        return jsonify({"message": "Password changed successfully"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# Manage Account Settings Endpoint
+@app.route("/settings", methods=["PUT"])
+def manage_settings():
+    if "email" not in session:
+        return jsonify({"error": "Not logged in"}), 401
+    
+    email = session["email"]
+    new_settings = request.json  # Assuming JSON payload
+    try:
+        AUTH.manage_settings(email, new_settings)  # Update this line with your manage settings logic
+        return jsonify({"message": "Settings updated successfully"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+if __name__ == "__main__":
+    app.run(debug=True)
