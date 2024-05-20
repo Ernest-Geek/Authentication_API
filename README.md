@@ -24,17 +24,20 @@ bash
 Copy code
 git clone https://github.com/Ernest-Geek/Authentication_API.git
 cd Authentication_API
+
 2. Create and activate a virtual environment:
 
 bash
 Copy code
 python -m venv venv
 source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+
 3. Install the dependencies:
 
 bash
 Copy code
 pip install -r requirements.txt
+
 4. Run the application:
 
 bash
