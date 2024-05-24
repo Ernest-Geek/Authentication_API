@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
+from app import db
 
 Base = declarative_base()
 
@@ -10,4 +11,8 @@ class User(Base):
     hashed_password = Column(String(128), nullable=False)
     session_id = Column(String(128), nullable=True)
     reset_token = Column(String(128), nullable=True)
+
+
+    def __repr__(self):
+        return f'<User {self.email}>'
 

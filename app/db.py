@@ -1,23 +1,22 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, scoped_session
-from app.models import Base  # Adjust the import according to your actual models location
+from app.models import User
+from app import db  # Assuming db is the SQLAlchemy instance
 
 class DB:
-    def __init__(self, db_url):
-        self._engine = create_engine(db_url)
-        self._session = scoped_session(sessionmaker(bind=self._engine))
+    def find_user_by(self, **kwargs) -> User:
+        return User.query.filter_by(**kwargs).one()
 
-    def add_user(self, email, hashed_password):
-        # Implementation of adding user
-        pass
+    def add_user(self, email: str, hashed_password: str) -> User:
+        user = User(email=email, hashed_password=hashed_password)
+        db.session.add(user)
+        db.session.commit()
+        return user
 
-    def find_user_by(self, **kwargs):
-        # Implementation of finding user
-        pass
+    def update_user(self, user_id: int, **kwargs) -> None:
+        user = User.query.get(user_id)
+        for key, value in kwargs.items():
+            setattr(user, key, value)
+        db.session.commit()
 
-    def update_user(self, user_id, **kwargs):
-        # Implementation of updating user
-        pass
-
-# Additional methods as needed
+    def get_user_by_id(self, user_id: int) -> User:
+        return User.query.get(user_id)
 
