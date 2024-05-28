@@ -1,57 +1,53 @@
 from flask import Flask, jsonify, request, session
 from app import create_app, db
-from app.auth.auth import Auth  # Corrected import path
+#from app.auth.auth import Auth  # Corrected import path
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = create_app()
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
-AUTH = Auth()
+#AUTH = Auth()
 
 @app.route("/", methods=["GET"], strict_slashes=False)
 def index() -> str:
     return jsonify({"message": "Page successfully created"})
 
-@app.route("/users", methods=["POST"], strict_slashes=False)
-def users() -> str:
-    app.logger.info(f"Request data: {request.data}")
+@app.route("/register", methods=["POST"], strict_slashes=False)
+def register() -> str:
     data = request.get_json()
-    if not data:
-        return jsonify({"error": "Email and password are required"}), 400
+    email=data.get("email")
+    password=data.get("password")
 
-    email = data.get("email")
-    password = data.get("password")
-    if not email or not password:
-        return jsonify({"error": "Email and password are required"}), 400
+    if not password or not email:
+        return jsonify({"error": "email and password required"}), 400
 
-    try:
-        AUTH.register_user(email, password)
-        return jsonify({"email": email, "message": "user created"})
-    except ValueError:
-        return jsonify({"message": "email already registered"}), 400
-    except Exception as e:
-        app.logger.error(f"Exception: {str(e)}")
-        return jsonify({"error": str(e)}), 500
+    existing_user = User.query.filter_by(email=email).first()
+    if existing_user:
+        return jsonify({"error": "User already exist"}), 400
 
+    hashed_password = generate_password_hash(password)
+    new_user = User(email=email, hashed_passsword=hashed_password)
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify({"message": "User Account succesfully created"}), 201
 
 @app.route("/login", methods=["POST"])
 def login() -> str:
-    email = request.form.get("email")
-    password = request.form.get("password")
-    if not email or not password:
-        return jsonify({"error": "Email and password are required"}), 400
+    data = request.get_json()
+    email = data.get("email")
+    password = data.get("password")
 
-    if not AUTH.valid_login(email, password):
-        return jsonify({"error": "Invalid email or password"}), 401
+    if not password or not email:
+        return jsonify({"error": "email and password are required"}), 400
+    
+    user = User.query.filter_by(email=email).first()
+    if not user or not check_password_hash(user.hashed_password, password):
+        return jsonify({"error": "invalid email and password"}), 400
 
-    session_id = AUTH.create_session(email)
-    if not session_id:
-        return jsonify({"error": "Unable to create session"}), 500
-
-    response = jsonify({"message": "Login successful"})
-    response.set_cookie("session_id", session_id)
-    return response
+    return jsonify({"message": "login successful"})
 
 @app.route("/logout", methods=["POST"])
 def logout() -> str:
