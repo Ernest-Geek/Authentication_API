@@ -52,7 +52,7 @@
               <form id="stripe-login">
                 <div class="field padding-bottom--24">
                   <label for="email">Email</label>
-                  <input type="email" name="email">
+                  <input type="email" id="email" name="email" autocomplete="email">
                 </div>
                 <div class="field padding-bottom--24">
                   <div class="grid--50-50">
@@ -61,11 +61,11 @@
                       <a href="#">Forgot your password?</a>
                     </div>
                   </div>
-                  <input type="password" name="password">
+                  <input type="password" id="password" name="password" autocomplete="current-password">
                 </div>
                 <div class="field field-checkbox padding-bottom--24 flex-flex align-center">
                   <label for="checkbox">
-                    <input type="checkbox" name="checkbox"> Stay signed in for a week
+                    <input type="checkbox" id="checkbox" name="checkbox" autocomplete="off"> Stay signed in for a week
                   </label>
                 </div>
                 <div class="field padding-bottom--24">
