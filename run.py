@@ -1,14 +1,25 @@
 from flask import Flask, jsonify, request, session
 from app import create_app, db
-#from app.auth.auth import Auth  # Corrected import path
+from app.models import User  # Import the User model
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = create_app()
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db.init_app(app)
 
-#AUTH = Auth()
+class Auth:
+    @staticmethod
+    def get_user_from_session_id(session_id):
+        return User.query.filter_by(session_id=session_id).first()
+
+    @staticmethod
+    def destroy_session(user_id):
+        user = User.query.get(user_id)
+        if user:
+            user.session_id = None
+            db.session.commit()
+
+AUTH = Auth()
 
 @app.route("/", methods=["GET"], strict_slashes=False)
 def index() -> str:
@@ -17,8 +28,8 @@ def index() -> str:
 @app.route("/register", methods=["POST"], strict_slashes=False)
 def register() -> str:
     data = request.get_json()
-    email=data.get("email")
-    password=data.get("password")
+    email = data.get("email")
+    password = data.get("password")
 
     if not password or not email:
         return jsonify({"error": "email and password required"}), 400
@@ -28,11 +39,11 @@ def register() -> str:
         return jsonify({"error": "User already exist"}), 400
 
     hashed_password = generate_password_hash(password)
-    new_user = User(email=email, hashed_passsword=hashed_password)
+    new_user = User(email=email, hashed_password=hashed_password)  # Corrected typo in 'hashed_password'
     db.session.add(new_user)
     db.session.commit()
 
-    return jsonify({"message": "User Account succesfully created"}), 201
+    return jsonify({"message": "User Account successfully created"}), 201
 
 @app.route("/login", methods=["POST"])
 def login() -> str:
@@ -78,4 +89,3 @@ def profile() -> str:
 
 if __name__ == "__main__":
     app.run(debug=True)
-
