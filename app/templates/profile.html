@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="jumbotron bg-dark text-white">
+    <h1 class="display-4">Welcome, {{ user.name }} {{ user.surname }}!</h1>
+    <p class="lead">This is your profile page.</p>
+    <a class="btn btn-primary" href="{{ url_for('home') }}">Logout</a>
+</div>
+{% endblock %}

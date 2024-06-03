@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="jumbotron bg-dark text-white">
+    <h1 class="display-4">Welcome to AuthApi!</h1>
+    <p class="lead">Emmanuel, Ernest and Hussien Welcomes you!</p>
+    <hr class="my-4">
+    <p>Click the buttons below to register or login.</p>
+    <a class="btn btn-primary btn-lg" href="{{ url_for('register') }}" role="button">Register</a>
+    <a class="btn btn-secondary btn-lg" href="{{ url_for('login') }}" role="button">Login</a>
+</div>
+{% endblock %}
