@@ -1,50 +1,51 @@
+from flask import Blueprint, request, jsonify
+from app.db import db
 from app.models import User
-from app.db import DB
-from sqlalchemy.orm.exc import NoResultFound
 from werkzeug.security import generate_password_hash, check_password_hash
-from uuid import uuid4
-from typing import Union
+from flask_login import login_user, logout_user, current_user
 
-db = DB()  # Initialize the database instance
+auth = Blueprint('auth', __name__)
 
-def load_user(user_id):
-    # Load a user from the database based on user_id
-    return db.get_user_by_id(user_id)
+@auth.route('/register', methods=['POST'])
+def register():
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
+    
+    if User.query.filter_by(email=email).first():
+        return jsonify({"message": "User already exists"}), 409
 
-class Auth:
-    def __init__(self):
-        self._db = db
+    new_user = User(
+        email=email,
+        hashed_password=generate_password_hash(password)
+    )
+    db.session.add(new_user)
+    db.session.commit()
 
-    def register_user(self, email: str, password: str) -> User:
-        try:
-            self._db.find_user_by(email=email)
-            raise ValueError(f"User {email} already exists")
-        except NoResultFound:
-            hashed_password = generate_password_hash(password)
-            return self._db.add_user(email, hashed_password)
+    return jsonify({"message": "User registered successfully"}), 201
 
-    def valid_login(self, email: str, password: str) -> bool:
-        try:
-            user = self._db.find_user_by(email=email)
-            return check_password_hash(user.hashed_password, password)
-        except NoResultFound:
-            return False
+@auth.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
 
-    def create_session(self, email: str) -> Union[str, None]:
-        try:
-            user = self._db.find_user_by(email=email)
-            session_id = str(uuid4())
-            self._db.update_user(user.id, session_id=session_id)
-            return session_id
-        except NoResultFound:
-            return None
+    user = User.query.filter_by(email=email).first()
 
-    def get_user_from_session_id(self, session_id: str) -> Union[User, None]:
-        try:
-            return self._db.find_user_by(session_id=session_id)
-        except NoResultFound:
-            return None
+    if user and check_password_hash(user.hashed_password, password):
+        login_user(user)
+        return jsonify({"message": "Login successful"}), 200
 
-    def destroy_session(self, user_id: int) -> None:
-        self._db.update_user(user_id, session_id=None)
+    return jsonify({"message": "Invalid credentials"}), 401
+
+@auth.route('/logout', methods=['POST'])
+def logout():
+    logout_user()
+    return jsonify({"message": "Logged out successfully"}), 200
+
+@auth.route('/status', methods=['GET'])
+def status():
+    if current_user.is_authenticated:
+        return jsonify({"message": "User is logged in"}), 200
+    return jsonify({"message": "User is not logged in"}), 401
 
