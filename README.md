@@ -1,110 +1,88 @@
-# Authentication_API
+Authentication API
+Authentication API is a simple web application for user authentication, including features like registration, login, and password reset. The application is built using Flask for the backend and HTML/CSS/JavaScript for the frontend.
 
-## Overview
+Table of Contents
+Features
+Setup
+Usage
+Routes
+Project Structure
+Screenshots
+Contributing
+License
+Features
+User Registration
+User Login
+Password Reset
+Responsive design with Bootstrap
+Setup
+Prerequisites
+Python 3.8+
+Flask
+Flask-Mail (for sending reset password emails)
+Installation
+Clone the repository:
 
-The Authentication API is a Python-based application designed to handle user authentication. It supports user registration, login, and token-based authentication using JWT (JSON Web Tokens).
+git clone https://github.com/yourusername/AuthApi.git
+cd AuthApi
+Create and activate a virtual environment:
 
-## Features
-
-- User Registration: Create a new user account.
-- User Login: Authenticate users and provide a JWT token.
-- Protected Routes: Access routes that require authentication using the JWT token.
-
-## Installation
-
-### Prerequisites
-- Python 3.x
-- pip (Python package installer)
-
-## Setup
-
-1.  Clone the repository:
-
-bash
-Copy code
-git clone https://github.com/Ernest-Geek/Authentication_API.git
-cd Authentication_API
-
-2. Create and activate a virtual environment:
-
-bash
-Copy code
-python -m venv venv
+python3 -m venv venv
 source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+Install the required packages:
 
-3. Install the dependencies:
 
-bash
-Copy code
 pip install -r requirements.txt
+Set environment variables for Flask:
 
-4. Run the application:
 
-bash
+export FLASK_APP=app.py
+export FLASK_ENV=development  # For development environment
+Run the application:
+
+
+flask run
+Usage
+Open your browser and navigate to http://127.0.0.1:5000/.
+Register a new user.
+Login with the registered user credentials.
+Use the "Forgot Password" feature to reset the password if needed.
+Routes
+Home: / - The landing page with options to register or login.
+Register: /register - Registration page for new users.
+Login: /login - Login page for existing users.
+Forgot Password: /forgot_password - Page to request password reset instructions.
+Project Structure
+arduino
 Copy code
-python app/main.py
+AuthApi/
+├── static/
+│   ├── css/
+│   │   └── style.css
+│   └── js/
+│       └── main.js
+├── templates/
+│   ├── base.html
+│   ├── index.html
+│   ├── login.html
+│   └── forgot_password.html
+├── app.py
+├── config.py
+├── requirements.txt
+└── README.md
+Screenshots
+Home Page
 
-## Usage
+Register Page
 
-### User Registration
+Login Page
 
-To register a new user, make a POST request to the /register endpoint with the following JSON payload:
+Forgot Password Page
 
-json
-Copy code
-{
-    "username": "newuser",
-    "password": "newpassword"
-}
-### Example using curl:
+Contributing
+Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
 
-bash
-Copy code
-curl -X POST http://localhost:5000/register -H "Content-Type: application/json" -d '{"username":"newuser","password":"newpassword"}'
-
-## User Login
-
-To log in, make a POST request to the /login endpoint with the following JSON payload:
-
-json
-Copy code
-{
-    "username": "newuser",
-    "password": "newpassword"
-}
-Example using curl:
-
-bash
-Copy code
-curl -X POST http://localhost:5000/login -H "Content-Type: application/json" -d '{"username":"newuser","password":"newpassword"}'
-The response will include a JWT token:
-
-json
-Copy code
-{
-    "token": "your.jwt.token.here"
-}
-## Protected Routes
-
-To access protected routes, include the JWT token in the Authorization header:
-
-bash
-Copy code
-curl -X GET http://localhost:5000/protected -H "Authorization: Bearer your.jwt.token.here"
-
-## Running Tests
-To run the tests, use the following command:
-
-bash
-Copy code
-python -m unittest discover -s test
-
-## Contributors
-
-- Ernest Ampene Junior
-- Emmanuel Kisanda
-- Hussein Abdullahi
-
-## License
+License
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 This project is licensed under the MIT License. See the LICENSE file for details.
