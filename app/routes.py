@@ -51,3 +51,11 @@ def profile(user_id):
         return render_template('profile.html', user=user)
     else:
         return render_template('not_found.html'), 404
+
+@current_app.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        # Handle password reset logic here
+        # Example: Send reset password email to the provided email address
+        return jsonify({'message': 'Password reset email sent successfully'}), 200
+    return render_template('forgot_password.html')
