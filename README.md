@@ -1,5 +1,5 @@
-Authentication API
-Authentication API is a simple web application for user authentication, including features like registration, login, and password reset. The application is built using Flask for the backend and HTML/CSS/JavaScript for the frontend.
+AuthApi
+AuthApi is a simple web application for user authentication, including features like registration, login, and password reset. The application is built using Flask for the backend and HTML/CSS/JavaScript for the frontend.
 
 Table of Contents
 Features
@@ -25,21 +25,19 @@ Clone the repository:
 
 git clone https://github.com/yourusername/AuthApi.git
 cd AuthApi
+
 Create and activate a virtual environment:
 
 python3 -m venv venv
 source venv/bin/activate  # On Windows use `venv\Scripts\activate`
 Install the required packages:
 
-
 pip install -r requirements.txt
 Set environment variables for Flask:
-
 
 export FLASK_APP=app.py
 export FLASK_ENV=development  # For development environment
 Run the application:
-
 
 flask run
 Usage
@@ -52,37 +50,9 @@ Home: / - The landing page with options to register or login.
 Register: /register - Registration page for new users.
 Login: /login - Login page for existing users.
 Forgot Password: /forgot_password - Page to request password reset instructions.
-Project Structure
-arduino
-Copy code
-AuthApi/
-├── static/
-│   ├── css/
-│   │   └── style.css
-│   └── js/
-│       └── main.js
-├── templates/
-│   ├── base.html
-│   ├── index.html
-│   ├── login.html
-│   └── forgot_password.html
-├── app.py
-├── config.py
-├── requirements.txt
-└── README.md
-Screenshots
-Home Page
-
-Register Page
-
-Login Page
-
-Forgot Password Page
 
 Contributing
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
 
 License
 This project is licensed under the MIT License - see the LICENSE file for details.
-
-This project is licensed under the MIT License. See the LICENSE file for details.
