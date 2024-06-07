@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     inputFields.forEach(input => {
         input.addEventListener('input', () => {
-            input.style.color = '#ffc107'; // Change text color to yellow
+            input.style.color = '#000'; // White color
         });
     });
 
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             const result = await response.json();
-            document.getElementById('registerResult').textContent = result.message;
+            window.alert(result.message); // Display registration message as prompt
         });
     }
 
@@ -52,3 +52,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+const navbarToggleBtn = document.getElementById('navbarToggleBtn');
+const navbar = document.getElementById('navbar');
+
+if (navbarToggleBtn && navbar) {
+    navbarToggleBtn.addEventListener('click', () => {
+        navbar.classList.toggle('show');
+    });
+}
